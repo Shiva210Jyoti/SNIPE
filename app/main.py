@@ -1,12 +1,17 @@
 from contextlib import asynccontextmanager
 from collections.abc import AsyncIterator
+from pathlib import Path
 
 from fastapi import FastAPI
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from app.api.v1.router import api_router
 from app.cache.redis_client import close_redis, get_redis, init_redis
 from app.config import get_settings
 from app.messaging.kafka_producer import close_kafka_producer, get_kafka_producer, init_kafka_producer
+
+STATIC_DIR = Path(__file__).parent / "static"
 
 
 @asynccontextmanager
@@ -49,6 +54,13 @@ def create_app() -> FastAPI:
         redis_status = "ok" if get_redis() is not None else "unavailable"
         kafka_status = "ok" if get_kafka_producer() is not None else "unavailable"
         return {"status": "ok", "redis": redis_status, "kafka": kafka_status}
+
+    @app.get("/", include_in_schema=False)
+    def home() -> FileResponse:
+        """Frontend UI — paste URL, get short link."""
+        return FileResponse(STATIC_DIR / "index.html")
+
+    app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
     # Redirect route mounted at root for clean short URLs: snip.url/abc123
     from app.api.v1.endpoints import redirect

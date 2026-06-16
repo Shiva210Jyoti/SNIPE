@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SnipURL — Shorten your links</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <div class="logo">Snip<span>URL</span></div>
+      <p class="tagline">Paste a long URL. Get a short link instantly.</p>
+    </header>
+
+    <section class="card">
+      <form id="shorten-form" class="form">
+        <label for="url-input" class="label">Long URL</label>
+        <div class="input-row">
+          <input
+            id="url-input"
+            type="url"
+            placeholder="https://example.com/very/long/url"
+            required
+            autocomplete="off"
+          />
+          <button type="submit" id="submit-btn">Shorten</button>
+        </div>
+      </form>
+
+      <p id="error-msg" class="error hidden"></p>
+
+      <div id="result" class="result hidden">
+        <p class="result-label">Your short link</p>
+        <div class="result-row">
+          <a id="short-link" href="#" target="_blank" rel="noopener noreferrer"></a>
+          <button type="button" id="copy-btn" class="copy-btn">Copy</button>
+        </div>
+        <p class="meta">Original: <span id="original-url"></span></p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <a href="/docs" target="_blank" rel="noopener">API Docs</a>
+      <span>·</span>
+      <a href="/health" target="_blank" rel="noopener">Health</a>
+    </footer>
+  </main>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
